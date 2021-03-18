@@ -1,0 +1,117 @@
+
+
+CREATE DATABASE DoctorAppointmentsDB;
+
+use DoctorAppointmentsDB;
+
+
+CREATE TABLE Users
+(
+	Id Uniqueidentifier PRIMARY KEY DEFAULT NEWID(),
+	[Login] NVARCHAR(max) NOT NULL,
+	[Password] NVARCHAR(max) NOT NULL,
+	FullName NVARCHAR(max) NOT NULL,
+)
+select * from users
+
+CREATE TABLE Specialization
+(
+	Id Uniqueidentifier PRIMARY KEY DEFAULT NEWID(),
+	Specialty nvarchar(max) not null,
+)
+
+INSERT INTO Specialization VALUES
+	('{e9ee53bb-e25b-4aa7-9a6b-165f321f04f5}','Терапевт'),
+	('{c5b203e6-6a48-4ba1-90e0-b3cd5e4ae9d7}','Инфекционист'),
+	('{bcc75a7f-07b6-4bca-a253-4f08ac46f297}','Кардиолог'),
+	('{d39e9630-e100-425d-b52d-7f97697e0e9d}','Онколог'),
+	('{9f185b37-af5c-4658-b600-7b98d730c328}','Дерматолог')
+
+
+CREATE TABLE DayInWeek
+(
+	Id Uniqueidentifier PRIMARY KEY DEFAULT NEWID(),
+	DayName NVARCHAR(MAX) NOT NULL,
+)
+
+insert into DayInWeek values 
+	('{d0e91b3a-9ead-4c96-b69e-82b8420c8b4f}','Понедельник'),
+	('{248cf392-40ca-4ddc-91ae-529bfa76cb57}','Вторник'),
+	('{39faad4a-9b7c-4fda-aa29-e3b82dccd95e}','Среда'),
+	('{7afaab4f-6a84-49d5-87d5-2d55086015f2}','Четверг'),
+	('{229febd6-a785-4860-a1c6-6e431832dc27}','Пятница')
+
+
+CREATE TABLE Schedule
+(
+	Id Uniqueidentifier PRIMARY KEY DEFAULT NEWID(),
+	DayStart Uniqueidentifier,
+	DayEnd Uniqueidentifier,
+	StartTime Time not null,
+	EndTime Time not null,
+	Lunchtime Time not null
+)
+
+drop table Schedule
+set dateformat dmy
+
+INSERT INTO Schedule VALUES
+	('{7febccf5-cb59-4fc7-8010-8e67b0a2bc7b}', '{d0e91b3a-9ead-4c96-b69e-82b8420c8b4f}','{229febd6-a785-4860-a1c6-6e431832dc27}','8:00','18:00', '13:00')
+
+select * from  Schedule
+
+CREATE TABLE Doctors
+(
+	Id Uniqueidentifier PRIMARY KEY DEFAULT NEWID(),
+	FullName NVARCHAR(max) NOT NULL,
+	Phone NVARCHAR(max) NOT NULL,
+	Email NVARCHAR(max) NOT NULL,
+	SpecializationId Uniqueidentifier not null,
+	CabinetNumber INT NOT NULL,
+	ScheduleId Uniqueidentifier not null
+)
+select *from Doctors
+
+INSERT INTO Doctors VALUES 
+	('{d8c9b25d-e322-472d-8e66-b0dabc5a94fe}', 'Весолов Геннадий Викторович', '87079989034', 'ves12@mail.ru', '{e9ee53bb-e25b-4aa7-9a6b-165f321f04f5}',210,'{7febccf5-cb59-4fc7-8010-8e67b0a2bc7b}'),
+	('{75361a6d-6f7e-4a38-8179-974ed34b9487}', 'Александр Сергеевич Пушкин', '87474789034', 'alex44@mail.ru', '{c5b203e6-6a48-4ba1-90e0-b3cd5e4ae9d7}',300,'{7febccf5-cb59-4fc7-8010-8e67b0a2bc7b}'),
+	('{c75b98b6-15ed-45f7-8b19-7f35ea95adc6}', 'Ким Виктор Андреевич', '87074781134', 'kim99@mail.ru', '{bcc75a7f-07b6-4bca-a253-4f08ac46f297}',101,'{7febccf5-cb59-4fc7-8010-8e67b0a2bc7b}'),
+	('{9cfedf79-9c22-4de7-8e1c-9e0fe72e6dbf}', 'Поливин Игорь Игоревич', '87074756034', 'igor44@mail.ru', '{d39e9630-e100-425d-b52d-7f97697e0e9d}',209,'{7febccf5-cb59-4fc7-8010-8e67b0a2bc7b}'),
+	('{d81311b2-3be2-476b-9c30-baf6a1bd3191}', 'Птушкина Анна Леонтьевна', '87074789012', 'pte22@mail.ru', '{9f185b37-af5c-4658-b600-7b98d730c328}',302,'{7febccf5-cb59-4fc7-8010-8e67b0a2bc7b}')
+
+
+CREATE TABLE DayRecords
+(
+	Id Uniqueidentifier PRIMARY KEY DEFAULT NEWID(),
+	DayName Uniqueidentifier not null,
+	RecordsId Uniqueidentifier
+)
+
+insert into DayRecords values
+	('{01f7976c-1d37-4d90-8cc4-4cc3014a9e50}', '{d0e91b3a-9ead-4c96-b69e-82b8420c8b4f}','{FD08864C-92DC-475E-9E11-79C0C87550DA}')
+insert into DayRecords values
+	('{233ab6df-c930-4a06-9076-1323dd733fa0}', '{d0e91b3a-9ead-4c96-b69e-82b8420c8b4f}','{562E0475-7EAE-4B0D-8C0E-78086B5C33C2}')
+insert into DayRecords values
+	('{abfef91b-06b1-47b3-bec7-bd3b52e18cfe}', '{d0e91b3a-9ead-4c96-b69e-82b8420c8b4f}','{5375F8A8-AD44-4DE0-9A23-B6CA5DCFF416}')
+
+CREATE TABLE Records
+(
+	Id Uniqueidentifier PRIMARY KEY DEFAULT NEWID(),
+	DoctorsId Uniqueidentifier not null,
+	UserId Uniqueidentifier not null,
+	RecordDateTimeStart TIME NOT NULL,
+	RecordDateTimeEnd TIME NOT NULL
+)
+
+select * from Records
+
+select * from Records r
+join users u on u.Id=r.UserId
+
+
+select r.RecordDateTimeStart, r.RecordDateTimeEnd from DayRecords d
+join Records r on d.RecordsId=r.Id
+where DayName='{d0e91b3a-9ead-4c96-b69e-82b8420c8b4f}'
+	
+select * from Specialization where id ='{e9ee53bb-e25b-4aa7-9a6b-165f321f04f5}'
+
